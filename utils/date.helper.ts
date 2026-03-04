@@ -1,4 +1,3 @@
-import { AvailableDay } from '@prisma/client';
 import { ValidationArguments } from 'class-validator';
 import { registerDecorator } from 'class-validator';
 import {
@@ -164,27 +163,12 @@ export function MinDateProp(relatedKey: keyof any, opts?: ValidationOptions) {
   };
 }
 
-const DayMap: Record<AvailableDay, Day> = {
-  monday: 1,
-  tuesday: 2,
-  wednesday: 3,
-  thursday: 4,
-  friday: 5,
-  saturday: 6,
-  sunday: 0,
-};
-
-function getNextDay(dayName: AvailableDay, date: Date = new Date()): Date {
-  return nextDay(date, DayMap[dayName]);
-}
-
 function checkIsSameDay(dateA: Date, dateB: Date): boolean {
   return isSameDay(dateA, dateB);
 }
 
 export default {
   getYearsCount,
-  getNextDay,
   getDayName,
   isAfterDate,
   getDayNumber,

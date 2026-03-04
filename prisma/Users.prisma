@@ -1,0 +1,24 @@
+model Users {
+  id          String  @id @default(uuid())
+  email       String?
+  password    String?
+  phoneNumber String?
+  firstName   String  @default("")
+  lastName    String  @default("")
+  active      Boolean @default(true)
+
+  lastLoginAt DateTime?
+  deletedAt DateTime?
+
+  roleId    String
+  role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  tokens UserSession[]
+  notifications Notifications[]
+  customer Customer?
+  store Store?
+
+  @@index([email])
+  @@index([phoneNumber])
+}

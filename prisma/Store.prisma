@@ -1,0 +1,21 @@
+model Store {
+    id                        String    @id @default(uuid())
+    userId                    String    @unique
+    user                      Users @relation(fields: [userId], references: [id], onDelete: Cascade)
+    name                      String
+    address                   String?
+    placeName                 String?
+    contactNumber             String?
+    notificationContactNumber String?
+    latitude                  Decimal?  @db.Decimal(10, 8)
+    longitude                 Decimal?  @db.Decimal(11, 8)
+    locationEmbedLink         String?
+    serviceRadius             Int
+    refNo                     Int       @default(autoincrement())
+    deletedAt                 DateTime?
+
+    createdAt DateTime @default(now())
+
+    @@index([userId])
+    @@index([latitude, longitude])
+}

@@ -1,0 +1,7 @@
+model Role {
+  id      String  @id @default(uuid())
+  name    String  @unique
+  createdAt DateTime @default(now())
+  active Boolean @default(false)
+  users     Users[]
+}

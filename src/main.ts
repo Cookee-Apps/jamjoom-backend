@@ -9,16 +9,13 @@ import { ConfigService } from '@nestjs/config';
 import { useContainer } from 'class-validator';
 import { setupSwagger } from 'utils/swagger/swagger.config';
 import { CacheService } from 'utils/cache/cache.service';
-import { Command } from 'ioredis';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
   const port = configService.get('PORT');
   const allowedOrigins = [
-    configService.get('FRONTEND_URL'), 
-    configService.get('DASHBOARD_URL'), 
-    configService.get('STORE_DASHBOARD_URL')
+    configService.get('DASHBOARD_URL')
   ];
   const logger = app.get(Logger);
   const devMode = configService.get('NODE_ENV') === 'development';
@@ -58,8 +55,7 @@ async function bootstrap() {
   if (devMode) {
     logger.log(`Admin Swagger available at: ${backendURL}/docs/admin`);
     logger.log(`Customer Swagger available at: ${backendURL}/docs/customer`);
-    logger.log(`Store Swagger available at: ${backendURL}/docs/store`);
-    logger.log(`Driver Swagger available at: ${backendURL}/docs/driver`);
+    logger.log(`Endpoints For ERP available at: ${backendURL}/docs/erp`)
   }
 }
 bootstrap();

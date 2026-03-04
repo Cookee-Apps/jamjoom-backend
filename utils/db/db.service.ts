@@ -5,8 +5,7 @@ import { Prisma, PrismaClient } from '@prisma/client';
 @Injectable()
 class DatabaseService
   extends PrismaClient<Prisma.PrismaClientOptions, 'query'>
-  implements OnModuleInit
-{
+  implements OnModuleInit {
   constructor(private readonly configService: ConfigService) {
     const isDevelopmentMode = configService.get('NODE_ENV') === 'development';
     const isDBLoggingEnabled = configService.get('DB_LOGGING_ENABLED');
@@ -25,7 +24,7 @@ class DatabaseService
   async runTransaction<T>(
     callback: (tx: Prisma.TransactionClient) => Promise<T>,
   ): Promise<T> {
-    return this.runTransaction(callback);
+    return this.$transaction(callback);
   }
 }
 

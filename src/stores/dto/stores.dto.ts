@@ -1,0 +1,182 @@
+import { ApiProperty, ApiPropertyOptional, OmitType } from '@nestjs/swagger';
+import { Prisma } from '@prisma/client';
+import {
+  IsArray,
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+} from 'class-validator';
+import { TransformToDate } from 'utils/decorators/TransformToDate';
+import { TransformToTime } from 'utils/decorators/TransformToTime';
+import { IPaginateFind } from 'utils/generic-interfaces/IPaginateFind';
+import {
+  ConvertToNumber,
+  Limit,
+  OptionalDecimal,
+  Skip,
+} from 'utils/number.helper';
+import { OptionalString } from 'utils/string.helper';
+import { IsValidStore } from '../decorators/check-valid-store';
+import { Type } from 'class-transformer';
+
+export class CreateStoreDto {
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty()
+  name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty()
+  address: string;
+
+  @IsNumber()
+  @ApiProperty()
+  latitude?: number;
+
+  @IsNumber()
+  @ApiProperty()
+  longitude?: number;
+
+  @IsNumber()
+  @ApiProperty()
+  serviceRadius: number;
+
+  @ApiProperty()
+  @IsPhoneNumber()
+  phoneNumber: string;
+
+  @ApiProperty()
+  @IsPhoneNumber()
+  contactNumber: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsPhoneNumber()
+  whatsappNotificationNumber: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  placeName: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  locationEmbedLink: string;
+}
+
+export class UpdateStoreDto implements Partial<CreateStoreDto> {
+  @ApiProperty()
+  @IsValidStore()
+  id: string;
+
+  @IsString()
+  @ApiProperty()
+  @IsNotEmpty()
+  name: string;
+
+  @IsString()
+  @ApiProperty()
+  @IsNotEmpty()
+  address: string;
+
+  @IsOptional()
+  @ApiProperty()
+  @ConvertToNumber()
+  latitude?: number;
+
+  @IsOptional()
+  @ApiProperty()
+  @ConvertToNumber()
+  longitude?: number;
+
+  @IsOptional()
+  @ApiProperty()
+  @IsNumber()
+  serviceRadius?: number;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsPhoneNumber()
+  phoneNumber?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsPhoneNumber()
+  contactNumber?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  placeName?: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  locationEmbedLink?: string;
+
+}
+
+export class ToggleStoreDto {
+  @IsValidStore()
+  @IsNotEmpty()
+  @ApiProperty()
+  id: string;
+}
+
+export class DeleteStoreDto {
+  @IsValidStore()
+  @IsNotEmpty()
+  @ApiProperty()
+  id: string;
+}
+
+export class GetAllStoresParamsDto implements IPaginateFind {
+  @IsOptional()
+  @IsString()
+  @ApiPropertyOptional()
+  searchText?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @TransformToDate()
+  from?: Date;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @TransformToDate()
+  to?: Date;
+
+  @Limit()
+  limit: number;
+
+  @Skip()
+  skip: number;
+}
+
+export class AddressIdDto {
+  @OptionalString()
+  addressId: string;
+
+  @OptionalDecimal()
+  longitude?: Prisma.Decimal;
+
+  @OptionalDecimal()
+  latitude?: Prisma.Decimal;
+}
+
+export class CheckStoreIsServiceableDto extends AddressIdDto {
+  @IsNotEmpty()
+  @IsValidStore()
+  @ApiProperty()
+  storeId: string;
+}
+
+export class UpdateStoreProfileDto extends OmitType(UpdateStoreDto, [
+  'id',
+] as const) {}
