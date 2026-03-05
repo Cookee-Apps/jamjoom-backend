@@ -36,7 +36,7 @@ import { NoCache } from 'utils/cache/cache.interceptor';
 @Controller('/customer/auth')
 @SwaggerCustomer('Auth')
 export class CustomerAuthController {
-  constructor(private readonly service: AuthService) {}
+  constructor(private readonly service: AuthService) { }
 
   @LogRequest()
   @Post('/send_otp')
@@ -96,9 +96,9 @@ export class CustomerAuthController {
       firstName: req.user.firstName,
       lastName: req.user.lastName,
       phoneNumber: req.user.phoneNumber,
-      email: req.user.email,
+      username: req.user.username,
       referralCode: customer.referralCode,
-      unreadMsgs: 0 
+      unreadMsgs: 0
       // await this.service.getUnreadNotificationCount(req.user.id),
     };
   }
@@ -107,7 +107,7 @@ export class CustomerAuthController {
   @ProtectRoute(['CUSTOMER'])
   @Post('/logout')
   @ApiOkResponse({ schema: { properties: { loggedOut: { type: 'boolean' } } } })
-  async logout(@CurrentSession() session: UserSession){
+  async logout(@CurrentSession() session: UserSession) {
     return await this.service.logout(session.id)
   }
 
@@ -124,7 +124,7 @@ export class CustomerAuthController {
   @Post('/delete_account')
   @ProtectRoute(['CUSTOMER'])
   @InvalidateRouteCache(KeysForRevalidate)
-  async deleteAccount(@CurrentCustomer() customer: Customer){
+  async deleteAccount(@CurrentCustomer() customer: Customer) {
     return await this.service.deleteAccount(customer.userId)
   }
 }

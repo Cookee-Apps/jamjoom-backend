@@ -25,9 +25,10 @@ import { OptionalString } from 'utils/string.helper';
 import { FileAPIProperty } from 'utils/decorators/FileAPIProperty';
 
 export class LoginDto implements ILoginDto {
-  @ApiProperty({ default: 'admin@spinners.com' })
-  @IsEmail()
-  email: string;
+  @ApiProperty({ default: 'admin1' })
+  @IsString()
+  @IsNotEmpty()
+  username: string;
   @ApiProperty({ default: 'admin123' })
   @IsString()
   @IsNotEmpty()
@@ -42,7 +43,7 @@ export class ProfileDTO implements IProfileDTO {
   @ApiProperty()
   id: string;
   @ApiProperty({ type: 'string', nullable: true, required: false })
-  email?: string | null;
+  username?: string | null;
   @ApiProperty({ type: 'string', nullable: true, required: false })
   phoneNumber?: string | null;
   @ApiProperty({ type: 'string', nullable: true, required: false })
@@ -56,12 +57,11 @@ export class ProfileDTO implements IProfileDTO {
 }
 
 export class UpdateProfileParamsDTO
-  implements Partial<ProfileDTO>, IUpdateProfileParamsDTO
-{
+  implements Partial<ProfileDTO>, IUpdateProfileParamsDTO {
   @ApiProperty()
   @IsOptional()
-  @IsEmail()
-  email?: string;
+  @IsString()
+  username?: string;
   @ApiProperty()
   @IsOptional()
   @IsString()
@@ -89,11 +89,11 @@ export class JWTPayload implements IJWTPayload {
   timestamp: string;
 }
 
-const defaultPhoneNumber = '+971555423109';
+const defaultPhoneNumber = '+918078675633';
 
 export class SendOTPParamsDTO implements ISendOTPParamsDTO {
   @ApiProperty({ default: defaultPhoneNumber })
-  @IsPhoneNumber(undefined, { message: 'Please Enter Valid UAE Mobile Number' })
+  @IsPhoneNumber(undefined, { message: 'Please Enter Valid Mobile Number' })
   phoneNumber: string;
   @ApiProperty({ default: false })
   @IsBoolean()

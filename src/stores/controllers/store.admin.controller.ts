@@ -53,17 +53,4 @@ export class StoreAdminController {
     return await this.storeService.getAllStores(params);
   }
 
-  @Get('serviceable')
-  @ProtectRoute()
-  async checkStoreIsServiceable(@Query() params: AddressIdDto) {
-    return await this.storeService.checkServiceableStore(params);
-  }
-
-  @Get('check_is_serviceable')
-  @ProtectRoute()
-  async checkIsStoreUnderTheServiceRadius(
-    @Query() params: CheckStoreIsServiceableDto,
-  ) {
-    return await this.storeService.checkIsAddressUnderTheServiceRadius(params);
-  }
 }

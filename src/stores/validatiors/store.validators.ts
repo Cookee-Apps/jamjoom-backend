@@ -6,11 +6,10 @@ import {
 import { StoreRepository } from '../repositories/stores.repository';
 import { AddressIdDto } from '../dto/stores.dto';
 import { Store } from '@prisma/client';
-import { capitalize } from 'utils/string.helper';
 
 @Injectable()
 export class StoreValidator {
-  constructor(private readonly storeRepo: StoreRepository) {}
+  constructor(private readonly storeRepo: StoreRepository) { }
 
   async isExistingNumber(phoneNumber: string, id?: string) {
     const store = await this.storeRepo.findOne({
@@ -20,6 +19,18 @@ export class StoreValidator {
     if (store) {
       throw new BadRequestException(
         'Phone number already exists for another store',
+      );
+    }
+  }
+
+  async isExistingUsername(username: string, id?: string) {
+    const store = await this.storeRepo.findOne({
+      user: { username },
+      ...(id ? { id: { not: id } } : {}),
+    });
+    if (store) {
+      throw new BadRequestException(
+        'Username already exists for another store',
       );
     }
   }

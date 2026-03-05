@@ -2,6 +2,7 @@ import { ApiProperty, ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
 import {
   IsArray,
+  IsBoolean,
   IsEnum,
   IsNotEmpty,
   IsNumber,
@@ -29,21 +30,49 @@ export class CreateStoreDto {
   name: string;
 
   @IsString()
+  @IsOptional()
+  @ApiPropertyOptional()
+  storeManager?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional()
+  location?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional()
+  storeImage?: string;
+
+  @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  address: string;
+  username: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty()
+  password: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional()
+  address?: string;
 
   @IsNumber()
-  @ApiProperty()
+  @IsOptional()
+  @ApiPropertyOptional()
   latitude?: number;
 
   @IsNumber()
-  @ApiProperty()
+  @IsOptional()
+  @ApiPropertyOptional()
   longitude?: number;
 
   @IsNumber()
-  @ApiProperty()
-  serviceRadius: number;
+  @IsOptional()
+  @ApiPropertyOptional()
+  serviceRadius?: number;
 
   @ApiProperty()
   @IsPhoneNumber()
@@ -53,20 +82,20 @@ export class CreateStoreDto {
   @IsPhoneNumber()
   contactNumber: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsOptional()
   @IsPhoneNumber()
-  whatsappNotificationNumber: string;
+  whatsappNotificationNumber?: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsOptional()
   @IsString()
-  placeName: string;
+  placeName?: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  locationEmbedLink: string;
+  locationEmbedLink?: string;
 }
 
 export class UpdateStoreDto implements Partial<CreateStoreDto> {
@@ -75,31 +104,61 @@ export class UpdateStoreDto implements Partial<CreateStoreDto> {
   id: string;
 
   @IsString()
-  @ApiProperty()
-  @IsNotEmpty()
-  name: string;
+  @IsOptional()
+  @ApiPropertyOptional()
+  name?: string;
 
   @IsString()
-  @ApiProperty()
-  @IsNotEmpty()
-  address: string;
+  @IsOptional()
+  @ApiPropertyOptional()
+  storeManager?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional()
+  location?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  @ApiPropertyOptional()
+  active?: boolean;
+
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional()
+  storeImage?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional()
+  username?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional()
+  password?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional()
+  address?: string;
 
   @IsOptional()
-  @ApiProperty()
+  @ApiPropertyOptional()
   @ConvertToNumber()
   latitude?: number;
 
   @IsOptional()
-  @ApiProperty()
+  @ApiPropertyOptional()
   @ConvertToNumber()
   longitude?: number;
 
   @IsOptional()
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsNumber()
   serviceRadius?: number;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsOptional()
   @IsPhoneNumber()
   phoneNumber?: string;
@@ -114,12 +173,10 @@ export class UpdateStoreDto implements Partial<CreateStoreDto> {
   @IsString()
   placeName?: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsOptional()
   @IsString()
-  @IsNotEmpty()
   locationEmbedLink?: string;
-
 }
 
 export class ToggleStoreDto {
@@ -179,4 +236,4 @@ export class CheckStoreIsServiceableDto extends AddressIdDto {
 
 export class UpdateStoreProfileDto extends OmitType(UpdateStoreDto, [
   'id',
-] as const) {}
+] as const) { }

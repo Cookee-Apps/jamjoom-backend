@@ -1,4 +1,3 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { ProfileDTO, SendOTPParamsDTO, VerifyOTPParamsDTO } from './auth.dto';
 import { OptionalString } from 'utils/string.helper';
 

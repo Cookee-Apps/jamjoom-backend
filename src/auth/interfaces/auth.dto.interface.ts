@@ -1,13 +1,13 @@
 import { Store } from '@prisma/client';
 
 export interface ILoginDto {
-    email: string;
+    username: string;
     password: string;
 }
 
 export interface IProfileDTO {
     id: string;
-    email?: string | null;
+    username?: string | null;
     phoneNumber?: string | null;
     firstName?: string | null;
     lastName?: string | null;
@@ -15,7 +15,7 @@ export interface IProfileDTO {
 }
 
 export interface IUpdateProfileParamsDTO extends Partial<IProfileDTO> {
-    email?: string;
+    username?: string;
     firstName?: string;
     lastName?: string;
 }
@@ -54,4 +54,3 @@ export interface ICheckPhoneNumberDTO {
 export interface ICheckReferralCodeDTO {
     referralCode: string;
 }
-  

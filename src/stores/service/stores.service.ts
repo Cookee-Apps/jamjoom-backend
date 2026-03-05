@@ -16,6 +16,7 @@ import {
 import { RoleService } from 'src/roles/services/role.service';
 import { Prisma } from '@prisma/client';
 import DatabaseService from 'utils/db/db.service';
+import { PasswordService } from 'utils/passwords.service';
 import { selectFields } from '../constants/store.constants';
 import { StoreValidator } from '../validatiors/store.validators';
 import { ConfigKey } from 'src/configuration/interfaces/configuration.dto.interface';
@@ -28,24 +29,34 @@ export class StoreService {
     private readonly storeRepo: StoreRepository,
     private readonly roleService: RoleService,
     private readonly dbService: DatabaseService,
-    private readonly storeValidator: StoreValidator
-  ) {}
+    private readonly storeValidator: StoreValidator,
+    private readonly passwordService: PasswordService,
+  ) { }
 
   async createStore(params: CreateStoreDto) {
     const roleDetails = await this.roleService.getRoleByName('STORE_MANAGER');
     if (!roleDetails) throw new InternalServerErrorException();
     await this.storeValidator.isExistingNumber(params.phoneNumber);
+    await this.storeValidator.isExistingUsername(params.username);
+    const hashedPassword = await this.passwordService.hashPassword(
+      params.password,
+    );
     return this.dbService.$transaction(async (tx) => {
       const newStore = await this.storeRepo.insert(
         {
           name: params.name,
+          storeManager: params.storeManager,
+          location: params.location,
+          storeImage: params.storeImage,
           user: {
             create: {
               phoneNumber: params.phoneNumber,
+              username: params.username,
+              password: hashedPassword,
               role: { connect: { id: roleDetails.id } },
             },
           },
-          serviceRadius: params.serviceRadius,
+          serviceRadius: params.serviceRadius || 0,
           placeName: params.placeName ? params.placeName : '',
           notificationContactNumber: params.whatsappNotificationNumber || '',
           address: params.address,
@@ -61,14 +72,45 @@ export class StoreService {
   }
 
   async updateStore(params: UpdateStoreDto) {
-
     const updateData: Prisma.StoreUpdateInput = {};
+    const userUpdateData: Prisma.UsersUpdateInput = {};
 
     if (params.phoneNumber !== undefined) {
-      updateData.user = { update: { phoneNumber: params.phoneNumber } };
+      userUpdateData.phoneNumber = params.phoneNumber;
+    }
+    if (params.username !== undefined) {
+      userUpdateData.username = params.username;
+    }
+    if (params.password !== undefined) {
+      userUpdateData.password = await this.passwordService.hashPassword(
+        params.password,
+      );
+    }
+
+    if (Object.keys(userUpdateData).length > 0) {
+      updateData.user = { update: userUpdateData };
+    }
+
+    if (params.name !== undefined) {
+      updateData.name = params.name;
+    }
+    if (params.storeManager !== undefined) {
+      updateData.storeManager = params.storeManager;
+    }
+    if (params.location !== undefined) {
+      updateData.location = params.location;
+    }
+    if (params.active !== undefined) {
+      updateData.active = params.active;
+    }
+    if (params.storeImage !== undefined) {
+      updateData.storeImage = params.storeImage;
     }
     if (params.address !== undefined) {
       updateData.address = params.address;
+    }
+    if (params.placeName !== undefined) {
+      updateData.placeName = params.placeName;
     }
     if (params.latitude !== undefined) {
       updateData.latitude = params.latitude;
@@ -82,14 +124,6 @@ export class StoreService {
     if (params.contactNumber !== undefined) {
       updateData.contactNumber = params.contactNumber;
     }
-    if (params.name !== undefined) {
-      updateData.name = params.name;
-    }
-
-    if (params.placeName !== undefined) {
-      updateData.placeName = params.placeName;
-    }
-
     if (params.locationEmbedLink !== undefined) {
       updateData.locationEmbedLink = params.locationEmbedLink;
     }
@@ -102,8 +136,9 @@ export class StoreService {
 
   async toggleStore(params: ToggleStoreDto) {
     const store = await this.findStoreById(params.id);
+    if (!store) throw new BadRequestException('Store not found');
     return await this.storeRepo.update(params.id, {
-      user: { update: { active: !store?.user.active } },
+      active: !store.active,
     });
   }
 
@@ -188,8 +223,8 @@ export class StoreService {
     const a =
       Math.sin(dLat / 2) ** 2 +
       Math.cos(this.toRad(lat1)) *
-        Math.cos(this.toRad(lat2)) *
-        Math.sin(dLon / 2) ** 2;
+      Math.cos(this.toRad(lat2)) *
+      Math.sin(dLon / 2) ** 2;
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
   };
@@ -302,9 +337,9 @@ export class StoreService {
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos(toRad(lat1)) *
-        Math.cos(toRad(lat2)) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
+      Math.cos(toRad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
 
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distance = R * c;

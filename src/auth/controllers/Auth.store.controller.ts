@@ -26,7 +26,7 @@ import { UserSession } from '@prisma/client';
 @SwaggerStore('Auth')
 @Controller('/store/auth')
 export class AuthStoreController {
-  constructor(private readonly service: AuthService) {}
+  constructor(private readonly service: AuthService) { }
 
   @Get('profile')
   @ProtectRoute(['STORE_MANAGER'])
@@ -37,7 +37,7 @@ export class AuthStoreController {
       firstName: req.user.firstName,
       lastName: req.user.lastName,
       phoneNumber: req.user.phoneNumber,
-      email: req.user.email,
+      username: req.user.username,
       unreadMsgs: 0
     };
   }

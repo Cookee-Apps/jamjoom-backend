@@ -17,10 +17,7 @@ import {
   LoginDto,
   LoginResponseTypeDTO,
   ProfileDTO,
-  SendOTPParamsDTO,
-  SendOTPResponseDTO,
-  UpdateProfileParamsDTO,
-  VerifyOTPParamsDTO,
+  UpdateProfileParamsDTO
 } from '../dto/auth.dto';
 import { ProtectRoute } from '../guards/auth.guard';
 import { AuthService } from '../services/auth.service';
@@ -33,20 +30,13 @@ import { KeysForRevalidate } from '../cache/keys-for-revalidate';
 @SwaggerAdmin('Auth')
 @Controller('/admin/auth')
 export class AuthController {
-  constructor(private readonly service: AuthService) {}
+  constructor(private readonly service: AuthService) { }
 
   @LogRequest()
   @Post('login')
   @ApiOkResponse({ type: LoginResponseTypeDTO })
   async login(@Body() loginDto: LoginDto): Promise<LoginResponseTypeDTO> {
     return await this.service.validateLogin(loginDto);
-  }
-
-  @LogRequest()
-  @Post('/send_otp')
-  @ApiOkResponse({ type: SendOTPResponseDTO })
-  async sendOTP(@Body() params: SendOTPParamsDTO) {
-    return await this.service.sendOTP({ ...params, role: 'ADMIN' });
   }
 
   @ProtectRoute()
@@ -58,7 +48,7 @@ export class AuthController {
       firstName: req.user.firstName,
       lastName: req.user.lastName,
       phoneNumber: req.user.phoneNumber,
-      email: req.user.email,
+      username: req.user.username,
       unreadMsgs: 0
     };
   }
@@ -73,7 +63,7 @@ export class AuthController {
     @Body() params: UpdateProfileParamsDTO,
   ) {
     await this.service.updateProfile(req.user.id, {
-      email: params.email,
+      username: params.username,
       firstName: params.firstName,
       lastName: params.lastName,
     });
@@ -103,28 +93,18 @@ export class AuthController {
   }
 
   @LogRequest()
-  @Post('/verify_otp')
-  async verifyOTP(@Body() params: VerifyOTPParamsDTO) {
-    try {
-      return await this.service.verifyOTP({ ...params, role: 'ADMIN' });
-    } catch (error) {
-      throw new BadRequestException(error.message);
-    }
-  }
-
-  @LogRequest()
   @Post('/refresh_token')
   @ApiHeader({
     name: 'x-refresh-token',
     required: true,
   })
   async refreshToken(@Headers('x-refresh-token') token: string) {
-    if (!token) { 
-      throw new ForbiddenException(); 
+    if (!token) {
+      throw new ForbiddenException();
     }
     token = token.split('Bearer ')[1];
-    if (!token) { 
-      throw new ForbiddenException(); 
+    if (!token) {
+      throw new ForbiddenException();
     }
     return await this.service.refreshAccessToken(token);
   }

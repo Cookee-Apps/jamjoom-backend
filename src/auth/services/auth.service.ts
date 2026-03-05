@@ -75,7 +75,7 @@ export class AuthService {
     return {
       ...tokens,
       userData: {
-        email: account.email,
+        username: account.username,
         id: account.id,
         referralCode,
         firstName: account.firstName,
@@ -90,12 +90,15 @@ export class AuthService {
 
   async validateLogin(loginDto: LoginDto): Promise<LoginResponseTypeDTO> {
     try {
-      const account = await this.userService.findOneByEmail(
-        loginDto.email,
-        RoleNamesObj.ADMIN,
+      const account = await this.userService.findOneByUsername(
+        loginDto.username,
       );
       if (!account)
         throw new BadRequestException(ErrorMessages.invalidCredentials);
+      const roleDetails = await this.roleService.getRoleById(account.roleId);
+      if (roleDetails?.name !== RoleNamesObj.ADMIN) {
+        throw new BadRequestException(ErrorMessages.invalidCredentials);
+      }
       if (!account.password) throw new BadRequestException();
       const isValidPassword = await this.passwordService.comparePasswords(
         loginDto.password,

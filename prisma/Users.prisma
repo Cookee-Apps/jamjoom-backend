@@ -1,6 +1,6 @@
 model Users {
   id          String  @id @default(uuid())
-  email       String?
+  username    String  @unique
   password    String?
   phoneNumber String?
   firstName   String  @default("")
@@ -8,17 +8,17 @@ model Users {
   active      Boolean @default(true)
 
   lastLoginAt DateTime?
-  deletedAt DateTime?
+  deletedAt   DateTime?
 
   roleId    String
   role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 
-  tokens UserSession[]
+  tokens        UserSession[]
   notifications Notifications[]
-  customer Customer?
-  store Store?
+  customer      Customer?
+  store         Store?
 
-  @@index([email])
   @@index([phoneNumber])
+  @@index([username])
 }

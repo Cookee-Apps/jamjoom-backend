@@ -159,20 +159,20 @@ export class CustomerService {
     tx?: Prisma.TransactionClient,
   ): Promise<[string, string | null]> {
     let customer = await this.findCustomerByPhoneNumber(phoneNumber);
-    if (customer) return [customer.id, customer.user.email];
+    if (customer) return [customer.id, customer.user.username];
     const role = await this.roleService.getRoleByName(RoleNamesObj.CUSTOMER);
     if (!role) throw new InternalServerErrorException();
     const account = await this.userService.createAccount(
       role?.id,
       phoneNumber,
-      undefined,
+      phoneNumber, // username is phoneNumber for now
       undefined,
       tx,
       name,
       lastName,
     );
     customer = await this.createCustomer(account.id, undefined, tx);
-    return [customer.id, account.email];
+    return [customer.id, account.username];
   }
 
   async findCustomerByReferralCode(referralCode: string) {

@@ -8,13 +8,13 @@ export class UserRepository {
   constructor(
     private readonly dbService: DatabaseService,
     private readonly queryBuilder: UserQueryBuilder,
-  ) {}
+  ) { }
 
   async findOne(params: {
     phoneNumber?: string;
     roleId?: string;
     id?: string;
-    email?: string;
+    username?: string;
     customerId?: string;
   }) {
     const where = this.queryBuilder.buildListWhereQuery(params);
@@ -30,7 +30,7 @@ export class UserRepository {
     return updated;
   }
 
-  async delete(id: string){
+  async delete(id: string) {
     return await this.dbService.users.update({ where: { id }, data: { deletedAt: new Date() } })
   }
 

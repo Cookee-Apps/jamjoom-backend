@@ -3,12 +3,11 @@ import { ProfileDTO, UpdateProfileParamsDTO } from '../../auth/dto/auth.dto';
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class UpdateDriverProfileParamsDTO
-  implements Partial<UpdateProfileParamsDTO>
-{
+  implements Partial<UpdateProfileParamsDTO> {
   @ApiProperty()
   @IsOptional()
   @IsString()
-  email: string;
+  username: string;
   @ApiProperty()
   @IsOptional()
   @IsString()
@@ -28,7 +27,7 @@ export class UpdateDriverProfileParamsDTO
 
 export class DriverProfile implements ProfileDTO {
   @ApiProperty()
-  email: string;
+  username: string;
   @ApiProperty()
   firstName: string;
   @ApiProperty()

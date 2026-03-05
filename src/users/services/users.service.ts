@@ -19,8 +19,8 @@ export class UserService implements OnModuleInit {
 
   private ADMIN_ACCOUNT_PASSWORD = 'admin123';
 
-  private async createAdmin(email: string, password: string) {
-    const existing = await this.findOneByEmail(email);
+  private async createAdmin(username: string, password: string) {
+    const existing = await this.findOneByUsername(username);
     const hashedPassword = await this.passwordService.hashPassword(password);
     if (existing) {
       return await this.userRepo.update(existing.id, {
@@ -29,32 +29,20 @@ export class UserService implements OnModuleInit {
     }
     const adminRole = (await this.roleService.getRoleByName('ADMIN')) as Role;
     return await this.userRepo.insert({
-      email,
+      username,
       roleId: adminRole.id,
       password: hashedPassword,
     });
   }
 
   async onModuleInit() {
-    const emails = ['admin1', 'admin2', 'admin3', 'admin4', 'admin5'];
-    for (const email of emails) {
-      await this.createAdmin(`${email}@spinners.com`, this.ADMIN_ACCOUNT_PASSWORD);
+    const usernames = ['admin1', 'admin2', 'admin3', 'admin4', 'admin5'];
+    for (const username of usernames) {
+      await this.createAdmin(username, this.ADMIN_ACCOUNT_PASSWORD);
     }
-    for (const email of ['marketing-team', 'marketing-team-1']) {
-      await this.createAdmin(`${email}@spinners.com`, 'spinnersmarketing');
+    for (const username of ['marketing-team', 'marketing-team-1']) {
+      await this.createAdmin(username, 'spinnersmarketing');
     }
-  }
-
-  async findOneByEmail(email: string, roleName?: string) {
-    let roleId: string | undefined;
-    if (roleName) {
-      const roleDetails = await this.roleService.getRoleByName(
-        roleName as RoleNames,
-      );
-      if (!roleDetails) throw new InternalServerErrorException();
-      roleId = roleDetails.id;
-    }
-    return await this.userRepo.findOne({ email });
   }
 
   async findOneByPhoneNumber(phoneNumber: string, roleName?: string) {
@@ -69,6 +57,10 @@ export class UserService implements OnModuleInit {
     return await this.userRepo.findOne({ phoneNumber, roleId });
   }
 
+  async findOneByUsername(username: string) {
+    return await this.userRepo.findOne({ username });
+  }
+
   async findById(id: string) {
     return await this.userRepo.findOne({ id });
   }
@@ -80,7 +72,7 @@ export class UserService implements OnModuleInit {
   async updateAccount(
     id: string,
     updateData: Partial<{
-      email: string;
+      username: string;
       name: string;
       password: string;
       lastLoginAt: Date;
@@ -94,15 +86,15 @@ export class UserService implements OnModuleInit {
   async createAccount(
     roleId: string,
     phoneNumber?: string,
-    email?: string,
+    username?: string,
     password?: string,
     db?: Prisma.TransactionClient,
     firstName?: string,
     lastName?: string,
   ) {
     const createInput: Prisma.UsersUncheckedCreateInput = {
-      email,
       phoneNumber,
+      username: username || '', // Ensure username is provided as it's now mandatory
       firstName,
       lastName,
       roleId,

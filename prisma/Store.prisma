@@ -1,16 +1,20 @@
 model Store {
     id                        String    @id @default(uuid())
     userId                    String    @unique
-    user                      Users @relation(fields: [userId], references: [id], onDelete: Cascade)
+    user                      Users     @relation(fields: [userId], references: [id], onDelete: Cascade)
     name                      String
+    storeManager              String?
+    contactNumber             String?
+    location                  String?
+    active                    Boolean   @default(true)
+    storeImage                String?
     address                   String?
     placeName                 String?
-    contactNumber             String?
     notificationContactNumber String?
     latitude                  Decimal?  @db.Decimal(10, 8)
     longitude                 Decimal?  @db.Decimal(11, 8)
     locationEmbedLink         String?
-    serviceRadius             Int
+    serviceRadius             Int       @default(0)
     refNo                     Int       @default(autoincrement())
     deletedAt                 DateTime?
 
