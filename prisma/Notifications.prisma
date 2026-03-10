@@ -1,12 +1,12 @@
 model Notifications {
-    id          String           @id @default(uuid())
-    userId      String
-    user        Users            @relation(fields: [userId], references: [id])
-    title       String
-    description String
-    read        Boolean          @default(false)
-    createdAt DateTime @default(now())
+  id          String   @id @default(uuid())
+  userId      String
+  user        Users    @relation(fields: [userId], references: [id])
+  title       String
+  description String
+  read        Boolean  @default(false)
+  createdAt   DateTime @default(now())
 
-    @@index([userId])
-    @@index([userId, read])
+  @@index([userId])
+  @@index([userId, read])
 }

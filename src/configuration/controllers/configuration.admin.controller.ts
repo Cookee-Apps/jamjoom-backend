@@ -9,13 +9,13 @@ import { ApiBody, ApiOkResponse } from '@nestjs/swagger';
 import { InvalidateRouteCache } from 'utils/cache/cache.invalidate.interceptor';
 import { ProtectRoute } from 'src/auth/guards/auth.guard';
 import { SwaggerAdmin } from 'utils/decorators/SwaggerDoc';
-import { FileField, RecieveFile } from 'utils/multer.helper';
+import { FileField, ReceiveFile } from 'utils/multer.helper';
 import { UpdatedResponse } from 'utils/decorators/UpdatedResponse';
 
 @SwaggerAdmin('Configuration')
 @Controller('admin/configuration')
 export class ConfigurationAdminController {
-  constructor(private readonly configurationService: ConfigurationService) {}
+  constructor(private readonly configurationService: ConfigurationService) { }
 
   @Get('list')
   @ProtectRoute()
@@ -34,7 +34,7 @@ export class ConfigurationAdminController {
 
   @Post('/update_banner_image')
   @UpdatedResponse()
-  @RecieveFile('photo')
+  @ReceiveFile('photo')
   @ProtectRoute()
   @InvalidateRouteCache('/list')
   @ApiBody({ type: UpdateBannerConfigDTO })

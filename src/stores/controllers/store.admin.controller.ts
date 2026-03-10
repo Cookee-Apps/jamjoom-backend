@@ -13,24 +13,33 @@ import { ProtectRoute } from 'src/auth/guards/auth.guard';
 import { SwaggerAdmin } from 'utils/decorators/SwaggerDoc';
 import { InvalidateRouteCache } from 'utils/cache/cache.invalidate.interceptor';
 import { KeysForRevalidate } from '../cache/keys-for-revalidate';
+import { FileField, ReceiveFile } from 'utils/multer.helper';
 
 @SwaggerAdmin('Store')
 @Controller('admin/stores')
 export class StoreAdminController {
-  constructor(private readonly storeService: StoreService) {}
+  constructor(private readonly storeService: StoreService) { }
 
   @Post('add')
   @ProtectRoute()
+  @ReceiveFile('storeImage')
   @InvalidateRouteCache(KeysForRevalidate)
-  async createStore(@Body() params: CreateStoreDto) {
-    return await this.storeService.createStore(params);
+  async createStore(
+    @Body() params: CreateStoreDto,
+    @FileField('storeImage') storeImage: Express.Multer.File,
+  ) {
+    return await this.storeService.createStore({ ...params, storeImage });
   }
 
   @Post('update')
   @ProtectRoute()
+  @ReceiveFile('storeImage')
   @InvalidateRouteCache(KeysForRevalidate)
-  async updateStore(@Body() params: UpdateStoreDto) {
-    return await this.storeService.updateStore(params);
+  async updateStore(
+    @Body() params: UpdateStoreDto,
+    @FileField('storeImage') storeImage: Express.Multer.File,
+  ) {
+    return await this.storeService.updateStore({ ...params, storeImage });
   }
 
   @Post('toggle')

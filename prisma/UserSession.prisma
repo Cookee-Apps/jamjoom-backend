@@ -6,17 +6,17 @@ model UserSession {
   createdAt DateTime @default(now())
 
   refreshTokens SessionRefreshTokens[]
-  firebaseToken String @default("")
+  firebaseToken String                 @default("")
 
   @@index([userId])
 }
 
 model SessionRefreshTokens {
-  id        String                 @id @default(uuid())
+  id        String      @id @default(uuid())
   expiresAt DateTime
-  createdAt DateTime               @default(now())
+  createdAt DateTime    @default(now())
   sessionId String
-  session   UserSession            @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  session   UserSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
   @@index([sessionId])
 }

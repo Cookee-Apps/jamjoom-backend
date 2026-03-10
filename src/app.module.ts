@@ -15,6 +15,7 @@ import { FileUploadModule } from 'utils/file-upload/file-upload.module';
 import { CustomersModule } from './customers/customers.module';
 import { SessionModule } from './session/session.module';
 import { StoresModule } from './stores/stores.module';
+import { BannersModule } from './banners/banners.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { StoresModule } from './stores/stores.module';
     CustomersModule,
     SessionModule,
     StoresModule,
+    BannersModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },

@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
@@ -22,12 +23,15 @@ import { StoreValidator } from '../validatiors/store.validators';
 import { ConfigKey } from 'src/configuration/interfaces/configuration.dto.interface';
 import DateHelpers from 'utils/date.helper';
 import { Decimal } from '@prisma/client/runtime/library';
+import { IUploadService, IUploadServiceToken } from 'utils/file-upload/IUploadService';
 
 @Injectable()
 export class StoreService {
   constructor(
     private readonly storeRepo: StoreRepository,
     private readonly roleService: RoleService,
+    @Inject(IUploadServiceToken)
+    private readonly uploadService: IUploadService,
     private readonly dbService: DatabaseService,
     private readonly storeValidator: StoreValidator,
     private readonly passwordService: PasswordService,
@@ -41,13 +45,25 @@ export class StoreService {
     const hashedPassword = await this.passwordService.hashPassword(
       params.password,
     );
+    let storeImage: string | null = null;
+    if (params.storeImage) {
+      if (typeof params.storeImage !== 'string') {
+        const upload = await this.uploadService.uploadFile(
+          params.storeImage,
+          'stores',
+        );
+        storeImage = upload.path;
+      } else {
+        storeImage = params.storeImage;
+      }
+    }
     return this.dbService.$transaction(async (tx) => {
       const newStore = await this.storeRepo.insert(
         {
           name: params.name,
           storeManager: params.storeManager,
           location: params.location,
-          storeImage: params.storeImage,
+          storeImage: storeImage,
           user: {
             create: {
               phoneNumber: params.phoneNumber,
@@ -104,7 +120,15 @@ export class StoreService {
       updateData.active = params.active;
     }
     if (params.storeImage !== undefined) {
-      updateData.storeImage = params.storeImage;
+      if (params.storeImage && typeof params.storeImage !== 'string') {
+        const upload = await this.uploadService.uploadFile(
+          params.storeImage,
+          'stores',
+        );
+        updateData.storeImage = upload.path;
+      } else {
+        updateData.storeImage = params.storeImage as string | null;
+      }
     }
     if (params.address !== undefined) {
       updateData.address = params.address;

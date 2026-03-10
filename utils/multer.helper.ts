@@ -3,15 +3,15 @@ import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { MulterField } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 import { ApiConsumes } from '@nestjs/swagger';
 
-export const RecieveFiles = (uploadFields: MulterField[]) => {
+export const ReceiveFiles = (uploadFields: MulterField[]) => {
   return applyDecorators(
     UseInterceptors(FileFieldsInterceptor(uploadFields)),
     ApiConsumes('multipart/form-data'),
   );
 };
 
-export const RecieveFile = (fieldName: string, maxCount = 1) =>
-  RecieveFiles([{ name: fieldName, maxCount }]);
+export const ReceiveFile = (fieldName: string, maxCount = 1) =>
+  ReceiveFiles([{ name: fieldName, maxCount }]);
 
 export const FileField = (fieldName: string) =>
   createParamDecorator((_, ctx: ExecutionContext) => {

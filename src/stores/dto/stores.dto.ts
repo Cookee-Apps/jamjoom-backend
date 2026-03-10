@@ -39,10 +39,9 @@ export class CreateStoreDto {
   @ApiPropertyOptional()
   location?: string;
 
-  @IsString()
   @IsOptional()
-  @ApiPropertyOptional()
-  storeImage?: string;
+  @ApiPropertyOptional({ type: 'string', format: 'binary' })
+  storeImage?: Express.Multer.File | string | null;
 
   @IsString()
   @IsNotEmpty()
@@ -59,19 +58,22 @@ export class CreateStoreDto {
   @ApiPropertyOptional()
   address?: string;
 
+  @ApiPropertyOptional()
+  @ConvertToNumber()
   @IsNumber()
   @IsOptional()
-  @ApiPropertyOptional()
   latitude?: number;
 
+  @ApiPropertyOptional()
+  @ConvertToNumber()
   @IsNumber()
   @IsOptional()
-  @ApiPropertyOptional()
   longitude?: number;
 
+  @ApiPropertyOptional()
+  @ConvertToNumber()
   @IsNumber()
   @IsOptional()
-  @ApiPropertyOptional()
   serviceRadius?: number;
 
   @ApiProperty()
@@ -123,10 +125,9 @@ export class UpdateStoreDto implements Partial<CreateStoreDto> {
   @ApiPropertyOptional()
   active?: boolean;
 
-  @IsString()
   @IsOptional()
-  @ApiPropertyOptional()
-  storeImage?: string;
+  @ApiPropertyOptional({ type: 'string', format: 'binary' })
+  storeImage?: Express.Multer.File | string | null;
 
   @IsString()
   @IsOptional()

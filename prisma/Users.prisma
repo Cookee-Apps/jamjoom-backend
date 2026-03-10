@@ -14,10 +14,12 @@ model Users {
   role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 
-  tokens        UserSession[]
-  notifications Notifications[]
-  customer      Customer?
-  store         Store?
+  tokens         UserSession[]
+  notifications  Notifications[]
+  customer       Customer?
+  store          Store?
+  currentStoreId String?
+  currentStore   Store?          @relation("CurrentStoreUsers", fields: [currentStoreId], references: [id])
 
   @@index([phoneNumber])
   @@index([username])

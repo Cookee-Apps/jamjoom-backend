@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder, OpenAPIObject } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 
-interface SwaggerDocument extends OpenAPIObject {}
+interface SwaggerDocument extends OpenAPIObject { }
 
 function cleanTagName(tagName: string): string {
   return tagName
@@ -69,7 +69,7 @@ export function setupSwagger(
     // customJs: '/swagger-assets/custom.js',
   };
   const backendUrl: string =
-    configService.get<string>('BACKEND_URL') || 'http://localhost:3001';
+    configService.get<string>('BACKEND_URL') || 'http://localhost:3000';
 
   const servers = [
     {
@@ -77,7 +77,7 @@ export function setupSwagger(
       description: 'Development Server',
     },
     {
-      url: 'http://localhost:3001',
+      url: 'http://localhost:3000',
       description: 'Local Server',
     },
   ];

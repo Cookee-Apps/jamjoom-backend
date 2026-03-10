@@ -1,10 +1,10 @@
 model UserOTPs {
-  id        String   @id @default(uuid())
+  id          String   @id @default(uuid())
   phoneNumber String
-  otp       String
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-  
+  otp         String
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+
   @@index([otp, createdAt(sort: Desc)], name: "idx_user_otp_otp")
   @@index([phoneNumber, createdAt(sort: Desc)], name: "idx_user_otp_phone_number")
 }
