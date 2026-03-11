@@ -1,12 +1,12 @@
 import { Global, Logger, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { IUploadServiceToken } from './IUploadService';
-import { S3UploadService } from './S3Upload.service';
 import { UploadsController } from './file-upload.controller';
+import { IUploadServiceToken } from './IUploadService';
+import { LocalUploadService } from './LocalUpload.service';
 
 const UploadProvider = {
   provide: IUploadServiceToken,
-  useClass: S3UploadService,
+  useClass: LocalUploadService,
 };
 
 @Global()

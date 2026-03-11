@@ -16,6 +16,7 @@ import { CustomersModule } from './customers/customers.module';
 import { SessionModule } from './session/session.module';
 import { StoresModule } from './stores/stores.module';
 import { BannersModule } from './banners/banners.module';
+import { ComplaintCategoriesModule } from './complaint-categories/complaint-categories.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { BannersModule } from './banners/banners.module';
     SessionModule,
     StoresModule,
     BannersModule,
+    ComplaintCategoriesModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },
