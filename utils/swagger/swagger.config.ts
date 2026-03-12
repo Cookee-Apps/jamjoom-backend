@@ -6,7 +6,7 @@ interface SwaggerDocument extends OpenAPIObject { }
 
 function cleanTagName(tagName: string): string {
   return tagName
-    .replace(/^(admin|customer|store|driver)-/, '')
+    .replace(/^(admin|customer|store)-/, '')
     .replace(/-/g, ' ');
 }
 
@@ -158,30 +158,5 @@ export function setupSwagger(
   SwaggerModule.setup('docs/store', app, () => storeDocFiltered, {
     ...swaggerOptions,
     customSiteTitle: 'Store API Docs',
-  });
-
-  // 🟪 Driver Swagger
-  const driverConfig = new DocumentBuilder()
-    .setTitle('Driver API')
-    .setDescription('Driver-only routes')
-    .setVersion('1.0')
-    .addBearerAuth(
-      {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-        description: 'Enter Driver JWT token',
-      },
-      'DriverToken',
-    )
-    .addServer(servers[0].url)
-    .addServer(servers[1].url)
-    .build();
-
-  const driverDocFull = SwaggerModule.createDocument(app, driverConfig);
-  const driverDocFiltered = filterDocumentByTagPrefix(driverDocFull, 'driver');
-  SwaggerModule.setup('docs/driver', app, () => driverDocFiltered, {
-    ...swaggerOptions,
-    customSiteTitle: 'Driver API Docs',
   });
 }

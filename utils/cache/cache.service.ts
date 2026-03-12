@@ -40,8 +40,11 @@ export class CacheService implements OnModuleDestroy, OnModuleInit {
     private readonly configService: ConfigService,
   ) {}
 
+  private CACHE_PREFIX = process.env.CACHE_PREFIX || 'app_cache';
+
   async get<T>(key: string): Promise<T | null> {
     if (!this.enabled) return null;
+    key = `${this.CACHE_PREFIX}-${key}`;
     const value = await this.redis.get(key);
     let found = null;
     try {
@@ -54,6 +57,7 @@ export class CacheService implements OnModuleDestroy, OnModuleInit {
 
   async set<T>(key: string, value: T, ttlSeconds?: number): Promise<void> {
     if (!this.enabled) return;
+    key = `${this.CACHE_PREFIX}-${key}`;
     try {
       const val = typeof value === 'string' ? value : JSON.stringify(value);
       if (ttlSeconds) {
@@ -66,15 +70,12 @@ export class CacheService implements OnModuleDestroy, OnModuleInit {
 
   async del(key: string): Promise<void> {
     if (!this.enabled) return;
+    
     await this.redis.del(key);
   }
 
   async deleteByPrefix(prefix: string){
-    return await this.deleteByMatch(`${prefix}*`)
-  }
-
-  async deleteBySuffix(suffix: string){
-    return await this.deleteByMatch(`*${suffix}`)
+    return await this.deleteByMatch(`${this.CACHE_PREFIX}-${prefix}*`)
   }
 
   private async deleteByMatch(match: string): Promise<void> {

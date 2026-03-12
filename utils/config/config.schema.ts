@@ -11,6 +11,7 @@ export const configValidationSchema = Joi.object({
   WHATSAPP_META_URL: Joi.string().uri().required(),
   WHATSAPP_WEBHOOK_TOKEN: Joi.string().required(),
   JWT_SECRET: Joi.string().required(),
+  CACHE_PREFIX: Joi.string().required(),
   JWT_ACCESS_TOKEN_EXPIRES: Joi.string().required(),
   JWT_REFRESH_TOKEN_EXPIRES: Joi.string().required(),
   OTP_LENGTH: Joi.number().required(),
