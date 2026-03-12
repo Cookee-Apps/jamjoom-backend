@@ -94,7 +94,7 @@ export class UserService implements OnModuleInit {
   ) {
     const createInput: Prisma.UsersUncheckedCreateInput = {
       phoneNumber,
-      username: username || '', // Ensure username is provided as it's now mandatory
+      username: username || phoneNumber || '', // Ensure username is provided as it's now mandatory
       firstName,
       lastName,
       roleId,
