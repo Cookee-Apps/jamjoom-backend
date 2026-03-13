@@ -17,11 +17,11 @@ export class TrollyRewardService {
             giftImage = upload.path
         }
         try {
-            const { giftImage: _, ...data } = dto;
             return await this.repository.create({
-                ...data,
-                giftImage,
-                store: { connect: { id: dto.storeId } }
+                giftImage: dto.giftImage ? giftImage : '',
+                store: { connect: { id: dto.storeId } },
+                giftName: dto.giftName,
+                termsAndConditions: dto.termsAndConditions
             });
         } catch (error) {
             if (giftImage) await this.uploadService.deleteFile(giftImage)
