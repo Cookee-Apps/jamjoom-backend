@@ -17,6 +17,7 @@ import { SessionModule } from './session/session.module';
 import { StoresModule } from './stores/stores.module';
 import { BannersModule } from './banners/banners.module';
 import { ComplaintCategoriesModule } from './complaint-categories/complaint-categories.module';
+import { ComplaintsModule } from './complaints/complaints.module';
 import { TrollyRewardModule } from './trolly-reward/trolly-reward.module';
 
 @Module({
@@ -46,6 +47,7 @@ import { TrollyRewardModule } from './trolly-reward/trolly-reward.module';
     StoresModule,
     BannersModule,
     ComplaintCategoriesModule,
+    ComplaintsModule,
     TrollyRewardModule,
   ],
   providers: [

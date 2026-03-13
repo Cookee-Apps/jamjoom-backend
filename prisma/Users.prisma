@@ -14,6 +14,7 @@ model Users {
   role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 
+  complaints     Complaint[]
   tokens         UserSession[]
   notifications  Notifications[]
   customer       Customer?

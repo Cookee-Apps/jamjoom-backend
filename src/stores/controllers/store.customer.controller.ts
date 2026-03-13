@@ -9,12 +9,6 @@ import { SwaggerCustomer } from 'utils/decorators/SwaggerDoc';
 export class StoreCustomerController {
   constructor(private readonly storeService: StoreService) {}
 
-  @ProtectRoute(['CUSTOMER'])
-  @Get('serviceable')
-  async checkStoreIsServiceable(@Query() params: AddressIdDto) {
-    return await this.storeService.checkServiceableStore(params);
-  }
-
   @Get('list')
   public async listStores(
     @Query() params: Omit<GetAllStoresParamsDto, 'from' | 'to'>,
