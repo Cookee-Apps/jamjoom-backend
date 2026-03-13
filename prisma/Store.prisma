@@ -18,9 +18,10 @@ model Store {
   refNo                     Int       @default(autoincrement())
   deletedAt                 DateTime?
 
-  createdAt         DateTime @default(now())
+  createdAt         DateTime       @default(now())
   banners           Banner[]
-  currentStoreUsers Users[]  @relation("CurrentStoreUsers")
+  trollyRewards     TrollyReward[]
+  currentStoreUsers Users[]        @relation("CurrentStoreUsers")
 
   @@index([userId])
   @@index([latitude, longitude])
