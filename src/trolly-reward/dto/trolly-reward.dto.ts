@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsBoolean, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import { Limit, Skip } from 'utils/number.helper';
 
 export class CreateTrollyRewardDto {
     @ApiProperty()
@@ -77,6 +78,19 @@ export class TrollyRewardResponseDTO {
 
     @ApiProperty()
     updatedAt: Date;
+}
+
+export class ListTrollyRewardsParamsDTO {
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsUUID()
+    storeId?: string;
+
+    @Limit()
+    limit: number;
+
+    @Skip()
+    skip: number;
 }
 
 export class GetAllTrollyRewardsResponseDTO {

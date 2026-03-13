@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { SwaggerAdmin } from 'utils/decorators/SwaggerDoc';
 import { ProtectRoute } from 'src/auth/guards/auth.guard';
 import { TrollyRewardService } from '../services/trolly-reward.service';
-import { CreateTrollyRewardDto, GetAllTrollyRewardsResponseDTO, UpdateTrollyRewardDto } from '../dto/trolly-reward.dto';
+import { CreateTrollyRewardDto, GetAllTrollyRewardsResponseDTO, ListTrollyRewardsParamsDTO, UpdateTrollyRewardDto } from '../dto/trolly-reward.dto';
 import { ApiOkResponse } from '@nestjs/swagger';
 import { FileField, ReceiveFile } from 'utils/multer.helper';
 
@@ -41,14 +41,12 @@ export class TrollyRewardAdminController {
     @Get('list')
     @ApiOkResponse({ type: GetAllTrollyRewardsResponseDTO })
     async list(
-        @Query('limit') limit?: number,
-        @Query('skip') skip?: number,
-        @Query('storeId') storeId?: string,
+        @Query() params: ListTrollyRewardsParamsDTO
     ) {
         return this.service.findAllAdmin({
-            limit: limit ? Number(limit) : undefined,
-            skip: skip ? Number(skip) : undefined,
-            storeId,
+            limit: params.limit ? Number(params.limit) : undefined,
+            skip: params.skip ? Number(params.skip) : undefined,
+            storeId: params.storeId,
         });
     }
 }
