@@ -1,0 +1,28 @@
+enum TransactionType {
+    CREDIT
+    DEBIT
+}
+
+model WalletTransactions {
+    id String @id @default(uuid())
+
+    customerId String
+    customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+    amount Int
+
+    type TransactionType
+
+    refNo Int @default(autoincrement())
+    remarks String?
+
+    storeId String?
+    store   Store? @relation(fields: [storeId], references: [id], onDelete: SetNull)
+
+    intermediateBalance Int
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([customerId])
+}

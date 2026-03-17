@@ -56,6 +56,8 @@ export class CustomerDTO implements Customer {
   referredBy: string | null;
   @ApiProperty()
   userId: string;
+  @ApiProperty()
+  points: number;
 }
 
 export class ListCustomersResponseDTO implements IPaginateResult<CustomerDTO> {

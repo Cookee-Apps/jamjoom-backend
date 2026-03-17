@@ -23,6 +23,8 @@ model Store {
   trollyRewards     TrollyReward[]
   currentStoreUsers Users[]        @relation("CurrentStoreUsers")
 
+  walletTransactions WalletTransactions[]
+
   @@index([userId])
   @@index([latitude, longitude])
 }

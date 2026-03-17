@@ -4,9 +4,15 @@ model Customer {
   user           Users      @relation(fields: [userId], references: [id], onDelete: Cascade)
   refNo          Int        @default(autoincrement())
   referralCode   String     @unique
+
   referredBy     String?
   referredByUser Customer?  @relation("CustomerReferrals", fields: [referredBy], references: [id])
+
   referrals      Customer[] @relation("CustomerReferrals")
+  
+  points         Int        @default(0)
+
+  transactions    WalletTransactions[]
 
   @@index([userId])
   @@index([referralCode])
