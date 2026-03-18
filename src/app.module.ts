@@ -19,6 +19,7 @@ import { BannersModule } from './banners/banners.module';
 import { ComplaintCategoriesModule } from './complaint-categories/complaint-categories.module';
 import { ComplaintsModule } from './complaints/complaints.module';
 import { TrollyRewardModule } from './trolly-reward/trolly-reward.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
@@ -32,6 +33,10 @@ import { TrollyRewardModule } from './trolly-reward/trolly-reward.module';
           limit: config.get<number>('THROTTLING_REQUESTS_LIMIT') || 10,
         },
       ],
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: 'uploads',
+      serveRoot: '/uploads',
     }),
     RoleModule,
     LoggerModule,
