@@ -13,6 +13,8 @@ model Complaint {
 
   photos ComplaintPhoto[]
 
+  refNo Int @default(autoincrement())
+
   @@index([categoryId])
 }
 
