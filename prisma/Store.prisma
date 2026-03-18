@@ -24,6 +24,7 @@ model Store {
   currentStoreUsers Users[]        @relation("CurrentStoreUsers")
 
   walletTransactions WalletTransactions[]
+  trollyScans        TrollyScans[]
 
   @@index([userId])
   @@index([latitude, longitude])

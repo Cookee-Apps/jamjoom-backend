@@ -13,6 +13,7 @@ model Customer {
   points         Int        @default(0)
 
   transactions    WalletTransactions[]
+  scans          TrollyScans[]
 
   @@index([userId])
   @@index([referralCode])

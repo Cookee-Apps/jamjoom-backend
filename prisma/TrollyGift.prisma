@@ -1,0 +1,26 @@
+model TrollyConfig {
+    id String @id @default(uuid())
+    giftId String @unique
+    gift TrollyGift @relation(fields: [giftId], references: [id])
+    
+    perDayGiftLimit Int
+
+    remainingStock Int
+
+    @@index([giftId])
+}
+
+model TrollyGift {
+    id String @id @default(uuid())
+    storeId String
+    store Store @relation(fields: [storeId], references: [id])
+    name String
+    image String
+    tAndc String
+
+    active Boolean @default(true)
+
+    config TrollyConfig?
+
+    @@index([storeId])
+}
