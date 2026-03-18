@@ -25,6 +25,7 @@ model Store {
 
   walletTransactions WalletTransactions[]
   trollyScans        TrollyScans[]
+  TrollyGift         TrollyGift[]
 
   @@index([userId])
   @@index([latitude, longitude])

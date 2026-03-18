@@ -1,26 +1,27 @@
 model TrollyConfig {
-    id String @id @default(uuid())
-    giftId String @unique
-    gift TrollyGift @relation(fields: [giftId], references: [id])
-    
-    perDayGiftLimit Int
+  id     String     @id @default(uuid())
+  giftId String     @unique
+  gift   TrollyGift @relation(fields: [giftId], references: [id])
 
-    remainingStock Int
+  perDayGiftLimit Int
 
-    @@index([giftId])
+  remainingStock Int
+
+  @@index([giftId])
 }
 
 model TrollyGift {
-    id String @id @default(uuid())
-    storeId String
-    store Store @relation(fields: [storeId], references: [id])
-    name String
-    image String
-    tAndc String
+  id      String @id @default(uuid())
+  storeId String
+  store   Store  @relation(fields: [storeId], references: [id])
+  name    String
+  image   String
+  tAndc   String
 
-    active Boolean @default(true)
+  active Boolean @default(true)
 
-    config TrollyConfig?
+  config      TrollyConfig?
+  TrollyScans TrollyScans[]
 
-    @@index([storeId])
+  @@index([storeId])
 }

@@ -1,19 +1,19 @@
 model Customer {
-  id             String     @id @default(uuid())
-  userId         String     @unique
-  user           Users      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  refNo          Int        @default(autoincrement())
-  referralCode   String     @unique
+  id           String @id @default(uuid())
+  userId       String @unique
+  user         Users  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  refNo        Int    @default(autoincrement())
+  referralCode String @unique
 
   referredBy     String?
-  referredByUser Customer?  @relation("CustomerReferrals", fields: [referredBy], references: [id])
+  referredByUser Customer? @relation("CustomerReferrals", fields: [referredBy], references: [id])
 
-  referrals      Customer[] @relation("CustomerReferrals")
-  
-  points         Int        @default(0)
+  referrals Customer[] @relation("CustomerReferrals")
 
-  transactions    WalletTransactions[]
-  scans          TrollyScans[]
+  points Int @default(0)
+
+  transactions WalletTransactions[]
+  scans        TrollyScans[]
 
   @@index([userId])
   @@index([referralCode])

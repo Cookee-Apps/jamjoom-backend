@@ -1,30 +1,29 @@
 model Complaint {
-    id String @id @default(uuid())
-    description String
+  id          String @id @default(uuid())
+  description String
 
-    userId String
-    user Users @relation(fields: [userId], references: [id])
+  userId String
+  user   Users  @relation(fields: [userId], references: [id])
 
-    categoryId String
-    category ComplaintCategory @relation(fields: [categoryId], references: [id])
+  categoryId String
+  category   ComplaintCategory @relation(fields: [categoryId], references: [id])
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    photos ComplaintPhoto[]
+  photos ComplaintPhoto[]
 
-    @@index([categoryId])
+  @@index([categoryId])
 }
 
-
 model ComplaintPhoto {
-    id String @id @default(uuid())
-    url String
+  id  String @id @default(uuid())
+  url String
 
-    complaintId String
-    complaint Complaint @relation(fields: [complaintId], references: [id])
+  complaintId String
+  complaint   Complaint @relation(fields: [complaintId], references: [id])
 
-    createdAt DateTime @default(now())
+  createdAt DateTime @default(now())
 
-    @@index([complaintId])
+  @@index([complaintId])
 }
