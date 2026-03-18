@@ -1,0 +1,43 @@
+name: Deploy to Staging
+on:
+  workflow_dispatch: 
+  push:
+    branches:
+      - staging
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Get last changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v35
+        with:
+          since_last_remote_commit: true
+          separator: ","
+      - name: copy file to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST_STAGING }}
+          port: ${{ secrets.HOST_PORT }}
+          username: ${{ secrets.STAGING_USER }}
+          password: ${{ secrets.STAGING_PASSWORD }}
+          # source: ${{ steps.changed-files.outputs.all_changed_files }}
+          source: "."
+          target: ${{ vars.PROJECT_PATH_STAGING_ACCOUNTS }} # Adjust this to the destination path on the EC2 instance
+      - name: SSH into VPS and deploy with PM2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_STAGING }}
+          port: ${{ secrets.HOST_PORT }}
+          username: ${{ secrets.STAGING_USER }}
+          password: ${{ secrets.STAGING_PASSWORD }}
+          command_timeout: 5m
+          script: |
+            cd ${{ vars.PROJECT_PATH_STAGING_ACCOUNTS }}
+            export PATH="$PATH:/home/ubuntu/.nvm/versions/node/v20.11.1/bin"
+            npm install
+            npm run migration:prod
+            npm run build
+            pm2 restart ${{ vars.PM2_NAME_STAGING_ACCOUNTS }}
