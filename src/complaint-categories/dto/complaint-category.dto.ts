@@ -6,7 +6,12 @@ export class CreateComplaintCategoryDto {
     @ApiProperty({ example: 'Service Quality' })
     @IsString()
     @IsNotEmpty()
-    name: string;
+    nameEn: string;
+
+    @ApiProperty({ example: 'സർവീസ് ക്വാളിറ്റി' })
+    @IsString()
+    @IsNotEmpty()
+    nameMl: string;
 
     @IsOptional()
     @FileAPIProperty()
@@ -22,7 +27,12 @@ export class UpdateComplaintCategoryDto {
     @ApiPropertyOptional({ example: 'Billing Issue' })
     @IsString()
     @IsOptional()
-    name?: string;
+    nameEn?: string;
+
+    @ApiPropertyOptional({ example: 'ബില്ലിംഗ് പ്രശ്നം' })
+    @IsString()
+    @IsOptional()
+    nameMl?: string;
 
     @IsOptional()
     @FileAPIProperty()
@@ -34,7 +44,10 @@ export class ComplaintCategoryResponseDto {
     id: string;
 
     @ApiProperty()
-    name: string;
+    nameEn: string;
+
+    @ApiProperty()
+    nameMl: string;
 
     @ApiProperty()
     icon: string;

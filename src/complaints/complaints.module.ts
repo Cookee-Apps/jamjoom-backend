@@ -4,9 +4,12 @@ import { ComplaintService } from './services/complaint.service';
 import { ComplaintRepository } from './repositories/complaint.repository';
 import { ComplaintCustomerController } from './controllers/complaint.customer.controller';
 
+import { ComplaintCategoriesModule } from '../complaint-categories/complaint-categories.module';
+
 @Module({
+  imports: [ComplaintCategoriesModule],
   controllers: [ComplaintAdminController, ComplaintCustomerController],
   providers: [ComplaintService, ComplaintRepository],
   exports: [ComplaintService],
 })
-export class ComplaintsModule {}
+export class ComplaintsModule { }

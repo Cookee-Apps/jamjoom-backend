@@ -5,16 +5,25 @@ import { IUploadService, IUploadServiceToken } from 'utils/file-upload/IUploadSe
 import TransactionService from 'utils/db/transaction.service';
 import { Prisma } from '@prisma/client';
 
+import { ComplaintCategoryService } from 'src/complaint-categories/services/complaint-category.service';
+
 @Injectable()
 export class ComplaintService {
   constructor(
     private readonly repository: ComplaintRepository,
     private readonly transactionService: TransactionService,
+    private readonly categoryService: ComplaintCategoryService,
     @Inject(IUploadServiceToken) private readonly uploadService: IUploadService,
   ) { }
 
   async create(dto: CreateComplaintDto) {
     const { photos, userId, categoryId, ...data } = dto;
+
+    const category = await this.categoryService.findById(categoryId);
+    if (!category || !category.active) {
+      throw new NotFoundException('Active complaint category not found');
+    }
+
     const uploaded = [] as string[];
     try {
       let photoCreate: { create: { url: string }[] } | undefined;
@@ -38,9 +47,16 @@ export class ComplaintService {
 
   async update(dto: UpdateComplaintDto) {
     return await this.transactionService.runTransaction(async (tx) => {
-      const { id, photos, ...data } = dto;
+      const { id, photos, categoryId, ...data } = dto;
       const existing = await this.repository.findById(id, tx);
       if (!existing) throw new NotFoundException('Complaint not found');
+
+      if (categoryId) {
+        const category = await this.categoryService.findById(categoryId);
+        if (!category || !category.active) {
+          throw new NotFoundException('Active complaint category not found');
+        }
+      }
 
       let photoCreate;
       const uploaded = [] as string[];
@@ -71,7 +87,7 @@ export class ComplaintService {
         if (uploaded.length) await this.uploadService.deleteFiles(uploaded);
         throw error;
       }
-    })
+    });
   }
 
   async delete(id: string) {

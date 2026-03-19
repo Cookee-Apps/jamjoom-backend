@@ -17,7 +17,8 @@ export class ComplaintCategoryService {
             icon = upload.path
         }
         try {
-            return await this.repository.create({ ...dto, icon });
+            const { icon: _, ...rest } = dto;
+            return await this.repository.create({ ...rest, icon });
         } catch (error) {
             if (icon) await this.uploadService.deleteFile(icon)
             throw error
@@ -25,13 +26,14 @@ export class ComplaintCategoryService {
     }
 
     async update(dto: UpdateComplaintCategoryDto) {
-        const { id, ...data } = dto;
+        const { id, icon: iconFile, ...data } = dto;
         const existing = await this.repository.findById(id);
         if (!existing) throw new NotFoundException('Complaint category not found');
-        let icon: string = ''
-        if (dto.icon) {
-            const upload = await this.uploadService.uploadFile(dto.icon, 'complaint-categories');
+        let icon: string = existing.icon;
+        if (iconFile) {
+            const upload = await this.uploadService.uploadFile(iconFile, 'complaint-categories');
             icon = upload.path
+            if (existing.icon) await this.uploadService.deleteFile(existing.icon)
         }
         return this.repository.update(id, { ...data, icon });
     }
@@ -39,7 +41,9 @@ export class ComplaintCategoryService {
     async delete(id: string) {
         const existing = await this.repository.findById(id);
         if (!existing) throw new NotFoundException('Complaint category not found');
-        return this.repository.delete(id);
+        const deleted = await this.repository.delete(id);
+        if (existing.icon) await this.uploadService.deleteFile(existing.icon);
+        return deleted;
     }
 
     async toggleActive(id: string) {
@@ -56,5 +60,9 @@ export class ComplaintCategoryService {
     async findAllCustomer(params: { limit?: number; skip?: number }) {
         const { limit, skip } = params;
         return this.repository.findAll({ take: limit, skip, active: true });
+    }
+
+    async findById(id: string) {
+        return this.repository.findById(id);
     }
 }

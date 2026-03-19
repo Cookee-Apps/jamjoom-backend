@@ -66,7 +66,13 @@ export class ComplaintCategoryResponseDto {
   id: string;
 
   @ApiProperty()
-  name: string;
+  nameEn: string;
+
+  @ApiProperty()
+  nameMl: string;
+
+  @ApiProperty()
+  icon: string;
 }
 
 export class ComplaintResponseDto {
