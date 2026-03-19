@@ -33,7 +33,7 @@
     "@nestjs/throttler": "^6.4.0",
     "@prisma/client": "^6.18.0",
     "argon2": "^0.43.0",
-    "axios": "^1.9.0",
+    "axios": "^1.13.6",
     "cache-manager": "^7.0.1",
     "cache-manager-ioredis": "^2.1.0",
     "class-transformer": "^0.5.1",
