@@ -18,10 +18,10 @@ model Store {
   refNo                     Int       @default(autoincrement())
   deletedAt                 DateTime?
 
-  createdAt         DateTime       @default(now())
-  banners           Banner[]
-  trollyRewards     TrollyReward[]
-  currentStoreUsers Users[]        @relation("CurrentStoreUsers")
+  createdAt DateTime @default(now())
+  banners   Banner[]
+
+  currentStoreUsers Users[] @relation("CurrentStoreUsers")
 
   walletTransactions WalletTransactions[]
   trollyScans        TrollyScans[]

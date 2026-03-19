@@ -18,7 +18,7 @@ import { StoresModule } from './stores/stores.module';
 import { BannersModule } from './banners/banners.module';
 import { ComplaintCategoriesModule } from './complaint-categories/complaint-categories.module';
 import { ComplaintsModule } from './complaints/complaints.module';
-import { TrollyRewardModule } from './trolly-reward/trolly-reward.module';
+
 import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
@@ -53,7 +53,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     BannersModule,
     ComplaintCategoriesModule,
     ComplaintsModule,
-    TrollyRewardModule,
+
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },
