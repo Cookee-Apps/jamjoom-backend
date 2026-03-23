@@ -1,22 +1,34 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Banner } from '@prisma/client';
 import { IsBoolean, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
-import { FileField } from 'utils/multer.helper';
 import { Limit, Skip } from 'utils/number.helper';
 
 export class CreateBannerDto {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    title: string;
-
-    @ApiProperty({ type: 'string', format: 'binary', required: false })
-    img: string;
+    titleEn: string;
 
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    link: string;
+    titleMl: string;
+
+    @ApiProperty({ type: 'string', format: 'binary', required: false })
+    imgEn: string;
+
+    @ApiProperty({ type: 'string', format: 'binary', required: false })
+    imgMl: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    linkEn: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    linkMl: string;
 
     @ApiProperty()
     @IsUUID()
@@ -38,17 +50,32 @@ export class UpdateBannerDto {
     @ApiProperty()
     @IsString()
     @IsOptional()
-    title?: string;
+    titleEn?: string;
 
     @ApiProperty()
     @IsString()
     @IsOptional()
-    img?: string;
+    titleMl?: string;
 
     @ApiProperty()
     @IsString()
     @IsOptional()
-    link?: string;
+    imgEn?: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsOptional()
+    imgMl?: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsOptional()
+    linkEn?: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsOptional()
+    linkMl?: string;
 
     @ApiProperty()
     @IsBoolean()
@@ -76,13 +103,19 @@ export class BannerDTO implements Banner {
     @ApiProperty()
     id: string;
     @ApiProperty()
-    img: string;
+    imgEn: string;
     @ApiProperty()
-    link: string;
+    imgMl: string;
+    @ApiProperty()
+    linkEn: string;
+    @ApiProperty()
+    linkMl: string;
     @ApiProperty()
     storeId: string;
     @ApiProperty()
-    title: string;
+    titleEn: string;
+    @ApiProperty()
+    titleMl: string;
     @ApiProperty()
     updatedAt: Date;
 }

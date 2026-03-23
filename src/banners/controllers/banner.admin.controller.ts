@@ -4,7 +4,7 @@ import { CreateBannerDto, GetAllBannersParamsDto, GetAllBannersResponseDTO, Upda
 import { ProtectRoute } from 'src/auth/guards/auth.guard';
 import { SwaggerAdmin } from 'utils/decorators/SwaggerDoc';
 
-import { FileField, ReceiveFile } from 'utils/multer.helper';
+import { FileField, ReceiveFile, ReceiveFiles } from 'utils/multer.helper';
 import { ApiOkResponse } from '@nestjs/swagger';
 
 @SwaggerAdmin('Banner')
@@ -14,23 +14,33 @@ export class BannerAdminController {
 
     @ProtectRoute(['ADMIN'])
     @Post('/create')
-    @ReceiveFile('img')
+    @ReceiveFiles([
+        { name: 'imgEn', maxCount: 1 },
+        { name: 'imgMl', maxCount: 1 },
+    ])
     async create(
         @Body() dto: CreateBannerDto,
-        @FileField('img') img: Express.Multer.File,
+        @FileField('imgEn') imgEn: Express.Multer.File,
+        @FileField('imgMl') imgMl: Express.Multer.File,
     ) {
-        if (img) dto.img = img.path;
+        if (imgEn) dto.imgEn = imgEn.path;
+        if (imgMl) dto.imgMl = imgMl.path;
         return await this.bannerService.createBanner(dto);
     }
 
     @ProtectRoute(['ADMIN'])
     @Post('/update')
-    @ReceiveFile('img')
+    @ReceiveFiles([
+        { name: 'imgEn', maxCount: 1 },
+        { name: 'imgMl', maxCount: 1 },
+    ])
     async update(
         @Body() dto: UpdateBannerDto,
-        @FileField('img') img: Express.Multer.File,
+        @FileField('imgEn') imgEn: Express.Multer.File,
+        @FileField('imgMl') imgMl: Express.Multer.File,
     ) {
-        if (img) dto.img = img.path;
+        if (imgEn) dto.imgEn = imgEn.path;
+        if (imgMl) dto.imgMl = imgMl.path;
         return await this.bannerService.updateBanner(dto);
     }
 

@@ -1,8 +1,11 @@
 model Banner {
-  id    String @id @default(uuid())
-  title String
-  img   String
-  link  String
+  id      String @id @default(uuid())
+  titleEn String
+  titleMl String
+  imgEn   String
+  imgMl   String
+  linkEn  String
+  linkMl  String
 
   storeId String
   store   Store  @relation(fields: [storeId], references: [id])
