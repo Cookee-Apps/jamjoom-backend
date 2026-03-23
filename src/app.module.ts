@@ -18,6 +18,8 @@ import { StoresModule } from './stores/stores.module';
 import { BannersModule } from './banners/banners.module';
 import { ComplaintCategoriesModule } from './complaint-categories/complaint-categories.module';
 import { ComplaintsModule } from './complaints/complaints.module';
+import { GiftsModule } from './gifts/gifts.module';
+import { GiftConfigsModule } from './gift-configs/gift-configs.module';
 
 import { ServeStaticModule } from '@nestjs/serve-static';
 
@@ -53,11 +55,12 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     BannersModule,
     ComplaintCategoriesModule,
     ComplaintsModule,
-
+    GiftsModule,
+    GiftConfigsModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },
     { provide: APP_INTERCEPTOR, useClass: CacheInterceptor },
   ],
 })
-export class AppModule { }
+export class AppModule {}

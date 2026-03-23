@@ -14,14 +14,20 @@ model TrollyGift {
   id      String @id @default(uuid())
   storeId String
   store   Store  @relation(fields: [storeId], references: [id])
-  name    String
-  image   String
-  tAndc   String
+  nameEn  String
+  nameMl  String
+  imgEn   String
+  imgMl   String
+  tAndcEn String
+  tAndcMl String
 
   active Boolean @default(true)
 
   config      TrollyConfig?
   TrollyScans TrollyScans[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([storeId])
 }
